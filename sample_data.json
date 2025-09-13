@@ -1,0 +1,18 @@
+[
+  {
+    "employee_id": "EMP001",
+    "name": "John Doe",
+    "department": "Engineering",
+    "salary": 75000,
+    "joining_date": "2024-01-15",
+    "skills": ["Python", "FastAPI", "MongoDB"]
+  },
+  {
+    "employee_id": "EMP002",
+    "name": "Jane Smith",
+    "department": "HR",
+    "salary": 65000,
+    "joining_date": "2024-02-01",
+    "skills": ["Recruitment", "Communication", "HR Management"]
+  }
+]
