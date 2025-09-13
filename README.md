@@ -18,7 +18,6 @@ A RESTful API for managing employee data built with FastAPI, MongoDB, and featur
 - **Framework**: FastAPI
 - **Database**: MongoDB with Motor async driver
 - **Validation**: Pydantic with custom validators
-- **Authentication**: (Planned) JWT Authentication
 - **API Documentation**: Automatic Swagger UI and ReDoc
 
 ## 📦 Installation
