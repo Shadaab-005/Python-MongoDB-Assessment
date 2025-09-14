@@ -7,10 +7,9 @@ from datetime import date
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    # Startup event - to initialize database (indexes are created here)
     await init_db()
     yield
-    # Shutdown event (can add optional cleanup here if needed)
+   
 
 app = FastAPI(title="Employee API with MongoDB", lifespan=lifespan)
 
@@ -45,7 +44,7 @@ async def create_employee(emp: Employee):
     new_employee = normalize_employee_dates_for_response(new_employee)
     return Employee(**new_employee)
 
-# 5. Listing employees with optional department filter and pagination
+# 2. Listing employees with optional department filter and pagination
 @app.get("/employees", response_model=dict)
 async def list_employees(
     department: Optional[str] = Query(None),
@@ -81,7 +80,7 @@ async def list_employees(
         }
     }
 
-# 6. Calculating average Salary by Department
+# 3. Calculating average Salary by Department
 @app.get("/employees/avg-salary")
 async def avg_salary():
     pipeline = [
@@ -105,7 +104,7 @@ async def avg_salary():
         result.append(doc)
     return result
 
-# 7. Searching by Skill
+# 4. Searching by Skill
 @app.get("/employees/search", response_model=List[Employee])
 async def search_by_skill(skill: str = Query(...)):
     cursor = employees_collection.find({"skills": skill})
@@ -115,7 +114,7 @@ async def search_by_skill(skill: str = Query(...)):
         employees.append(Employee(**doc))
     return employees
 
-# 2. Getting Employee by ID
+# 5. Getting Employee by ID
 @app.get("/employees/{employee_id}", response_model=Employee)
 async def get_employee(employee_id: str):
     doc = await employees_collection.find_one({"employee_id": employee_id})
@@ -124,7 +123,7 @@ async def get_employee(employee_id: str):
     doc = normalize_employee_dates_for_response(doc)
     return Employee(**doc)
 
-# 3. Updating Employee
+# 6. Updating Employee
 @app.put("/employees/{employee_id}", response_model=Employee)
 async def update_employee(employee_id: str, updates: UpdateEmployee):
     update_data = updates.model_dump(exclude_unset=True)
@@ -144,10 +143,11 @@ async def update_employee(employee_id: str, updates: UpdateEmployee):
     result = normalize_employee_dates_for_response(result)
     return Employee(**result)
 
-# 4. Deleting Employee
+# 7. Deleting Employee
 @app.delete("/employees/{employee_id}")
 async def delete_employee(employee_id: str):
     res = await employees_collection.delete_one({"employee_id": employee_id})
     if res.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Employee not found")
+
     return {"message": "Employee deleted successfully"}
